@@ -1,0 +1,74 @@
+#include <SoftwareSerial.h> // Inclui a biblioteca para comunicação serial via software (usando 
+pinos digitais) 
+// Cria uma instância de SoftwareSerial chamada BT nos pinos 7 (RX) e 6 (TX) 
+SoftwareSerial BT(7,6); // RX, TX 
+
+// Define os pinos que irão controlar o motor via ponte H 
+#define IN1 5 // Pino de controle do motor 1 
+#define IN2 4 // Pino de controle do motor 1 
+#define IN3 3 // Pino de controle do motor 2 
+#define IN4 2 // Pino de controle do motor 2 
+
+void setup() 
+{ 
+    Serial.begin(9600); // Inicializa a comunicação serial padrão (USB) a 9600 bps 
+    BT.begin(9600);     // Inicializa a comunicação serial com o módulo Bluetooth a 9600 bps 
+    pinMode(IN1, OUTPUT); // Define o pino IN1 como saída 
+    Página 52 de 54 
+    pinMode(IN2, OUTPUT); // Define o pino IN2 como saída 
+    pinMode(IN3, OUTPUT); // Define o pino IN3 como saída 
+    pinMode(IN4, OUTPUT); // Define o pino IN4 como saída 
+} 
+
+void loop() 
+{ 
+    if (BT.available()) 
+    {       
+        // Verifica se há dados recebidos pelo Bluetooth 
+        char cmd = BT.read(); // Lê o comando recebido e armazena na variável 'cmd' 
+        switch(cmd) {  
+
+        case 'F': // frente 
+        // Verifica qual comando foi recebido 
+        digitalWrite(IN1, LOW);  // Define IN1 como LOW para motor 1 
+        digitalWrite(IN2, HIGH); // Define IN2 como HIGH para motor 1 (movimento para frente) 
+        digitalWrite(IN3, HIGH); // Define IN3 como HIGH para motor 2 
+        digitalWrite(IN4, LOW);  // Define IN4 como LOW para motor 2 (movimento para frente) 
+        Serial.println("frente"); // Envia mensagem "frente" para o monitor serial 
+        break; 
+
+        case 'B': // trás 
+        digitalWrite(IN1, HIGH); // Define IN1 como HIGH para motor 1 
+        digitalWrite(IN2, LOW);  // Define IN2 como LOW para motor 1 (movimento para trás) 
+        digitalWrite(IN3, LOW);  // Define IN3 como LOW para motor 2 
+        digitalWrite(IN4, HIGH); // Define IN4 como HIGH para motor 2 (movimento para trás) 
+        Serial.println("trás");  // Envia mensagem "trás" para o monitor serial 
+        break; 
+
+        case 'L': // esquerda 
+        Página 53 de 54 
+        digitalWrite(IN1, HIGH); // Define IN1 como HIGH para motor 1 
+        digitalWrite(IN2, LOW);  // Define IN2 como LOW para motor 1 
+        digitalWrite(IN3, HIGH); // Define IN3 como HIGH para motor 2 
+        digitalWrite(IN4, LOW);  // Define IN4 como LOW para motor 2 (gira para esquerda) 
+        Serial.println("esquerda"); // Envia mensagem "esquerda" para o monitor serial 
+        break; 
+
+        case 'R': // direita 
+        digitalWrite(IN1, LOW);  // Define IN1 como LOW para motor 1 
+        digitalWrite(IN2, HIGH); // Define IN2 como HIGH para motor 1 
+        digitalWrite(IN3, LOW);  // Define IN3 como LOW para motor 2 
+        digitalWrite(IN4, HIGH); // Define IN4 como HIGH para motor 2 (gira para direita) 
+        Serial.println("direita"); // Envia mensagem "direita" para o monitor serial 
+        break; 
+
+        case 'S': // parar 
+        digitalWrite(IN1, LOW); // Para motor 1 
+        digitalWrite(IN2, LOW); // Para motor 1 
+        digitalWrite(IN3, LOW); // Para motor 2 
+        digitalWrite(IN4, LOW); // Para motor 2 
+        Serial.println("parar"); // Envia mensagem "parar" para o monitor serial 
+        break; 
+        } 
+  } 
+} 
